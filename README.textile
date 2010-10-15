@@ -30,13 +30,11 @@ h2. Column names and calculated columns
 
 Column names are generally the model attribute name however a limited set of calculated columns can also be derived.  For example
 
-bc.
-	column_format :percentage_of_revenue, :order => 9, :class => 'right'
+bc.	column_format :percentage_of_revenue, :order => 9, :class => 'right'
 	
 p. Will define a column that renders the percentage of total revenue that this row's revenue represents.  The regexp used to recognize calculated columns is:
 
-bc.
-	/(percent|percentage|difference|diff)_of_(.*)/
+bc.	/(percent|percentage|difference|diff)_of_(.*)/
 	
 p. Hence percentage and difference (plus their variants) are the two available calculated column types.
 
@@ -61,9 +59,32 @@ h2. Predefined formatters
 |:unknown_on_blank|Displays **(unknown)** when **column.blank?** is true.  This is a localized value.  The key **I18n.t('table.unknown')** is used.|
 |:not_set_on_blank|Displays **(not set)** when **column.blank?** is true.  This is a localized value.  The key **I18n.t('table.not_set')** is used.|
 
-p. If no formatter is specified then **#to_s** is called on the value unless the value is a **Fixnumn** in which case **#number_with_delimiter** is called._
+p. If no formatter is specified then **#to_s** is called on the value unless the value is a **Fixnumn** in which case **#number_with_delimiter** is called.
 
 h2. Table rendering
+
+To render the html table, call **#to_table** on any ActiveRecord result set.  The defaults are:
+
+bc. :exclude      => EXCLUDE_COLUMNS, 
+    :exclude_ids  => true, 
+    :odd_row      => "odd", 
+    :even_row     => "even", 
+    :totals       => true,
+    :total_one    => 'tables.total_one',
+    :total_many   => 'tables.total_many',
+    :unknown_key  => 'tables.unknown',
+    :not_set_key  => 'tables.not_set'
+
+|_. Option|_. Description|
+|:exclude|Array of columns that should not be rendered|
+|:exclude_ids|Don't render columns that end in **_id**|
+|:odd_row|CSS class name for odd rows|
+|:even_row|CSS class name for even rows|
+|:totals|Add a total row at the bottom of the table|
+|:total_one|I18n key for rendering the total row when the total is one|
+|:total_many|I18n key for rendering the total row when the total is not one|
+|:unknown_key|I18n key for rendering **(unknown)**|
+|:not_set_key|I18n key for rendering **(not_set_key)**|
 
 h1. License
 
