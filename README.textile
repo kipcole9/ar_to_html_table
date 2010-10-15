@@ -24,21 +24,18 @@ end
 
 p. The general form of a column definition is:
 
-bc.
-column_format :column_name, options
+bc. column_format :column_name, options
 
 h2. Column names and calculated columns
 
 p. Column names are generally the model attribute name however a limited set of calculated columns can also be derived. For example:
 
-bc.
-column_format :percentage_of_revenue, :order => 9, :class => 'right'
-	
+bc. column_format :percentage_of_revenue, :order => 9, :class => 'right'
+
 p. Will define a column that renders the percentage of total revenue that this row's revenue represents.  The regexp used to recognize calculated columns is:
 
-bc.
-(percent|percentage|difference|diff)_of_(.*)
-	
+bc. (percent|percentage|difference|diff)_of_(.*)
+
 p. Hence percentage and difference (plus their variants) are the two available calculated column types.
 
 h2. Column options
