@@ -9,17 +9,20 @@ by class names and hence styling is defined in CSS.
 
 h1. Usage
 
+p. ar_to_html_table consists of two parts:
+* Defining column formats in the ActiveRecord model
+* Rendering an ActiveRecord result set
+
 h2. Column definitions
 
 p. Columns in the table are formatted based upon a column definition applied in the Model.  Some examples:
 
-bc. 
-class Product < ActiveRecord::Base
-	column_format :name,      :order => 1
-	column_format :orders,    :total => :sum
-	column_format :revenue,   :total => :sum, :order => 1, :class => 'right'
-	column_format :age, 	  :total => :avg, :order => 2, :class => 'right', :formatter => :number_with_delimiter
-	....
+bc. class Product < ActiveRecord::Base
+  column_format :name,      :order => 1
+  column_format :orders,    :total => :sum
+  column_format :revenue,   :total => :sum, :order => 1, :class => 'right'
+  column_format :age, 	  :total => :avg, :order => 2, :class => 'right', :formatter => :number_with_delimiter
+  ....
 end
 
 p. The general form of a column definition is:
@@ -34,9 +37,9 @@ bc. column_format :percentage_of_revenue, :order => 9, :class => 'right'
 
 p. Will define a column that renders the percentage of total revenue that this row's revenue represents.  The regexp used to recognize calculated columns is:
 
-bc. (percent|percentage|difference|diff)_of_(.*)
+bc. /(percent|percentage|difference|diff)_of_(.*)/
 
-p. Hence percentage and difference (plus their variants) are the two available calculated column types.
+p. Where the match is the name of the column against which the calculation if made.  Therefore percentage and difference (plus their variants) are the two available calculated column types.
 
 h2. Column options
 
@@ -65,8 +68,7 @@ h2. Table rendering
 
 To render the html table, call **#to_table** on any ActiveRecord result set.  The defaults are:
 
-bc. 
-:exclude      => EXCLUDE_COLUMNS, 
+bc. :exclude      => EXCLUDE_COLUMNS, 
 :exclude_ids  => true, 
 :odd_row      => "odd", 
 :even_row     => "even", 
