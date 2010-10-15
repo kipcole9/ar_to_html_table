@@ -11,6 +11,42 @@ h1. Usage
 
 h2. Column definitions
 
+p. Columns in the table are formatted based upon a column definition applied in the Model.  Some examples:
+
+bc. 
+class Product < ActiveRecord::Base
+	column_format :name,      :order => 1
+	column_format :orders,    :total => :sum
+	column_format :revenue,   :total => :sum, :order => 1, :class => 'right'
+	column_format :age, 	  :total => :avg, :order => 2, :class => 'right', :formatter => :number_with_delimiter
+	....
+	
+end
+
+p. The general form of a column definition is:
+
+bc. column_format :column_name, options
+
+p. Where options are:
+
+|_. Option|_. Description|
+|:order|Positions a column order relative to other columns.  The number isn't important, just its relative value compared to other columns.  Columns are sorted by order and rendered in that order.  The default order is the order in which the columns are defined.|
+|:total|Renders a table footer with a calculation of all the values in the column.  The available totalling methods are **:sum**, **:count** and **:average** (or :avg or :mean)|
+|:class|The CSS class for this column.  Note that a **<colgroup />** is defined for each column and each **<colgroup />** has as CSS class that is the column name|
+|:formatter|Used to format the value of each table cell.  There are several predefined formatters.  This value can also be a lambda for arbitrary formatting.|
+
+p. Predefined formatters
+
+|_. Formatter|_. Description|
+|:number_with_delimiter| |
+|:integer_with_delimiter |
+|:seconds_to_time| |
+|:hours_to_time| |
+|:currency_without_sign| |
+|:percentage| |
+|:bar_and_percentage| |
+
+
 h2. Table rendering
 
 h1. License
