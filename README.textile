@@ -20,8 +20,8 @@ p. Columns in the table are formatted based upon a column definition applied in 
 bc. class Product < ActiveRecord::Base
   column_format :name,      :order => 1
   column_format :orders,    :total => :sum
-  column_format :revenue,   :total => :sum, :order => 1, :class => 'right'
-  column_format :age, 	  :total => :avg, :order => 2, :class => 'right', :formatter => :number_with_delimiter
+  column_format :revenue,   :total => :sum, :order => 5, :class => 'right'
+  column_format :age, 	    :total => :avg, :order => 20, :class => 'right', :formatter => :number_with_delimiter
   ....
 end
 
@@ -79,8 +79,10 @@ bc. :exclude      => EXCLUDE_COLUMNS,
 :not_set_key  => 'tables.not_set'
 
 |_. Option|_. Description|
+|:include|Array of columns that should be rendered|
 |:exclude|Array of columns that should not be rendered|
 |:exclude_ids|Don't render columns that end in **_id**|
+|:sort|A **Proc** that is called to sort the rows.  Called as **results.sort(options[:sort])**.|
 |:odd_row|CSS class name for odd rows|
 |:even_row|CSS class name for even rows|
 |:totals|Add a total row at the bottom of the table|
