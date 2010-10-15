@@ -28,7 +28,7 @@ bc. column_format :column_name, options
 
 h2. Column names and calculated columns
 
-Column names are generally the model attribute name however a limited set of calculated columns can also be derived.  For example
+p. Column names are generally the model attribute name however a limited set of calculated columns can also be derived.  For example
 
 bc.	column_format :percentage_of_revenue, :order => 9, :class => 'right'
 	
@@ -66,14 +66,14 @@ h2. Table rendering
 To render the html table, call **#to_table** on any ActiveRecord result set.  The defaults are:
 
 bc. :exclude      => EXCLUDE_COLUMNS, 
-    :exclude_ids  => true, 
-    :odd_row      => "odd", 
-    :even_row     => "even", 
-    :totals       => true,
-    :total_one    => 'tables.total_one',
-    :total_many   => 'tables.total_many',
-    :unknown_key  => 'tables.unknown',
-    :not_set_key  => 'tables.not_set'
+:exclude_ids  => true, 
+:odd_row      => "odd", 
+:even_row     => "even", 
+:totals       => true,
+:total_one    => 'tables.total_one',
+:total_many   => 'tables.total_many',
+:unknown_key  => 'tables.unknown',
+:not_set_key  => 'tables.not_set'
 
 |_. Option|_. Description|
 |:exclude|Array of columns that should not be rendered|
