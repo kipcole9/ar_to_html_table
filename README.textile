@@ -66,7 +66,7 @@ p. If no formatter is specified then **#to_s** is called on the value unless the
 
 h2. Table rendering
 
-To render the html table, call **#to_table** on any ActiveRecord result set.  The defaults are:
+To render the html table, call **#to_table(options)** on any ActiveRecord result set.  The default options are:
 
 bc. :exclude      => EXCLUDE_COLUMNS, 
 :exclude_ids  => true, 
