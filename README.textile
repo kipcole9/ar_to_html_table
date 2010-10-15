@@ -28,7 +28,7 @@ bc. column_format :column_name, options
 
 h2. Column names and calculated columns
 
-p. Column names are generally the model attribute name however a limited set of calculated columns can also be derived.  For example
+p. Column names are generally the model attribute name however a limited set of calculated columns can also be derived. For example:
 
 bc.	column_format :percentage_of_revenue, :order => 9, :class => 'right'
 	
