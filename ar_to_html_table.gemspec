@@ -11,8 +11,8 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/kipcole9/ar_to_html_table"
   s.summary     = %q{Render and ActiveRecord result set as an HTML table}
   s.description = <<-EOF
-    Defines Array#to_table that will accept ActiveRecord result sets
-    and render them as an html table.
+    Defines Array#to_table that will render an ActiveRecord result set
+    as an html table.
   EOF
 
   s.rubyforge_project = "ar_to_html_table"
@@ -21,4 +21,5 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
+  s.add_dependency('builder')
 end

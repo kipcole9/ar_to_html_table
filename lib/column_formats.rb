@@ -30,7 +30,7 @@ module ColumnFormats
     # Hash options are:
     # => :class => 'class_name' # used to add a CSS class to the <td> element
     # => :formatter => A symbol denoting a method or a proc to be used to 
-    #    format the data element.  It will be passed the elemet only.
+    #    format the data element.  It will be passed the element only.
     #
     def default_formats
       attr_formats = {}
