@@ -16,6 +16,7 @@ module ColumnFormats
     def table_format(method, options)
       @attr_formats = (@attr_formats || default_formats).deep_merge({method.to_s => options})
     end
+    alias :column_format :table_format
     
     def format_of(name)
       @attr_formats ||= default_formats

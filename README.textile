@@ -26,7 +26,21 @@ p. The general form of a column definition is:
 
 bc. column_format :column_name, options
 
-h2. Column options are:
+h2. Column names and calculated columns
+
+Column names are generally the model attribute name however a limited set of calculated columns can also be derived.  For example
+
+bc.
+	column_format :percentage_of_revenue, :order => 9, :class => 'right'
+	
+p. Will define a column that renders the percentage of total revenue that this row's revenue represents.  The regexp used to recognize calculated columns is:
+
+bc.
+	/(percent|percentage|difference|diff)_of_(.*)/
+	
+p. Hence percentage and difference (plus their variants) are the two available calculated column types.
+
+h2. Column options
 
 |_. Option|_. Description|
 |:order|Positions a column order relative to other columns.  The number isn't important, just its relative value compared to other columns.  Columns are sorted by order and rendered in that order.  The default order is the order in which the columns are defined.|
@@ -37,8 +51,8 @@ h2. Column options are:
 h2. Predefined formatters
 
 |_. Formatter|_. Description|
-|:float_with_precision|Calls **#number_with_precision after #to_f on the value.|
-|:integer_with_delimiter|Calls **#integer_with_delimiter** unless **I18n::Backend::Simple.included_modules.include? Cldr::Format*** is true in which case I18n.localize is called.|
+|:float_with_precision|Calls **#number_with_precision** after **#to_f** on the value.|
+|:integer_with_delimiter|Calls **#integer_with_delimiter** unless **I18n::Backend::Simple.included_modules.include? Cldr::Format** is true in which case **I18n.localize** is called.|
 |:seconds_to_time|Formats an integer as hh:mm:ss, mostly used for durations, not time or datetime columns|
 |:hours_to_time|Formats an integer as hh:00.|
 |:currency_without_sign|Calls **#number_with_precision** with precision 2.|
@@ -47,7 +61,7 @@ h2. Predefined formatters
 |:unknown_on_blank|Displays **(unknown)** when **column.blank?** is true.  This is a localized value.  The key **I18n.t('table.unknown')** is used.|
 |:not_set_on_blank|Displays **(not set)** when **column.blank?** is true.  This is a localized value.  The key **I18n.t('table.not_set')** is used.|
 
-p. If no formatter is specified then **#to_s** is called on the value.
+p. If no formatter is specified then **#to_s** is called on the value unless the value is a **Fixnumn** in which case **#number_with_delimiter** is called._
 
 h2. Table rendering
 
