@@ -88,8 +88,8 @@ bc. :exclude      => EXCLUDE_COLUMNS,
 |:totals|Add a total row at the bottom of the table|
 |:total_one|I18n key for rendering the total row when the total is one|
 |:total_many|I18n key for rendering the total row when the total is not one|
-|:unknown_key|I18n key for rendering **(unknown)**|
-|:not_set_key|I18n key for rendering **(not_set_key)**|
+|:unknown_key|I18n key for rendering **(Unknown)**|
+|:not_set_key|I18n key for rendering **(Not Set)**|
 
 h1. License
 

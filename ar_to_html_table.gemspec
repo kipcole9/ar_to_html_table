@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Kip Cole"]
   s.email       = ["kipcole9@gmail.com"]
-  s.homepage    = "http://rubygems.org/gems/ar_to_html_table"
+  s.homepage    = "http://github.com/kipcole9/ar_to_html_table"
   s.summary     = %q{Render and ActiveRecord result set as an HTML table}
   s.description = <<-EOF
     Defines Array#to_table that will accept ActiveRecord result sets
