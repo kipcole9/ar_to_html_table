@@ -1,1 +1,8 @@
-.h1 ActiveRecord result set to HTML Table
+h1. Synopsis
+
+p. ar_to_html_table renders an ActiveRecord result set into an html_table. For example:
+
+bc. Product.all.to_table
+
+p. will produce a table with default characteristics.  These characteristics are primarily driven
+by class names and hence styling is defined in CSS.
