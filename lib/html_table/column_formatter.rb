@@ -41,7 +41,6 @@ module HtmlTable
       (hours += 1; minutes = 0) if minutes == 60
       "#{"%02d" % hours}:#{"%02d" % minutes}:#{"%02d" % seconds}"
     end
-    #memoize :seconds_to_time
   
     def hours_to_time(val, options)
       "#{"%02d" % val}:00"

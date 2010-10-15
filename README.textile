@@ -20,32 +20,34 @@ class Product < ActiveRecord::Base
 	column_format :revenue,   :total => :sum, :order => 1, :class => 'right'
 	column_format :age, 	  :total => :avg, :order => 2, :class => 'right', :formatter => :number_with_delimiter
 	....
-	
 end
 
 p. The general form of a column definition is:
 
 bc. column_format :column_name, options
 
-p. Where options are:
+h2. Column options are:
 
 |_. Option|_. Description|
 |:order|Positions a column order relative to other columns.  The number isn't important, just its relative value compared to other columns.  Columns are sorted by order and rendered in that order.  The default order is the order in which the columns are defined.|
-|:total|Renders a table footer with a calculation of all the values in the column.  The available totalling methods are **:sum**, **:count** and **:average** (or :avg or :mean)|
-|:class|The CSS class for this column.  Note that a **<colgroup />** is defined for each column and each **<colgroup />** has as CSS class that is the column name|
+|:total|Renders a table footer with a calculation of all the values in the column.  The available totaling methods are **:sum**, **:count** and **:average** (or :avg or :mean)|
+|:class|The CSS class for this column.  Note that a **colgroup** is defined for each column and each **colgroup** has as CSS class that is the column name|
 |:formatter|Used to format the value of each table cell.  There are several predefined formatters.  This value can also be a lambda for arbitrary formatting.|
 
-p. Predefined formatters
+h2. Predefined formatters
 
 |_. Formatter|_. Description|
-|:number_with_delimiter| |
-|:integer_with_delimiter |
-|:seconds_to_time| |
-|:hours_to_time| |
-|:currency_without_sign| |
-|:percentage| |
-|:bar_and_percentage| |
+|:float_with_precision|Calls **#number_with_precision after #to_f on the value.|
+|:integer_with_delimiter|Calls **#integer_with_delimiter** unless **I18n::Backend::Simple.included_modules.include? Cldr::Format*** is true in which case I18n.localize is called.|
+|:seconds_to_time|Formats an integer as hh:mm:ss, mostly used for durations, not time or datetime columns|
+|:hours_to_time|Formats an integer as hh:00.|
+|:currency_without_sign|Calls **#number_with_precision** with precision 2.|
+|:percentage|An integer rendered as a percentage.  Calls **#number_to_percentage** with a precision of 1.|
+|:bar_and_percentage|Displays a CSS bar and a percentage.|
+|:unknown_on_blank|Displays **(unknown)** when **column.blank?** is true.  This is a localized value.  The key **I18n.t('table.unknown')** is used.|
+|:not_set_on_blank|Displays **(not set)** when **column.blank?** is true.  This is a localized value.  The key **I18n.t('table.not_set')** is used.|
 
+p. If no formatter is specified then **#to_s** is called on the value.
 
 h2. Table rendering
 
