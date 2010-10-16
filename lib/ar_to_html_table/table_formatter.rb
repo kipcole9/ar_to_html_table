@@ -1,6 +1,6 @@
 module ArToHtmlTable
   class TableFormatter
-    include                 HtmlTable::ColumnFormatter
+    include                 ArToHtmlTable::ColumnFormatter
     include                 ::ActionView::Helpers::NumberHelper
     
     attr_accessor           :html, :table_columns, :klass, :merged_options, :rows, :totals
