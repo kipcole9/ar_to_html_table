@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>new (HtmlTable::TableFormatter)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/html_table/table_formatter.rb, line 44</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">results</span>, <span class="ruby-identifier">options</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;[to_table] First argument must be an array of ActiveRecord rows&quot;</span> \
+        <span class="ruby-keyword kw">unless</span>  <span class="ruby-identifier">results</span>.<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:first</span>).<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:class</span>).<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:descends_from_active_record?</span>) <span class="ruby-operator">||</span>
+                <span class="ruby-identifier">results</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">NamedScope</span><span class="ruby-operator">::</span><span class="ruby-constant">Scope</span>)
+                
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;[to_table] Sort option must be a Proc&quot;</span> \
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:sort</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:sort</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Proc</span>)
+          
+      <span class="ruby-ivar">@klass</span>          = <span class="ruby-identifier">results</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">class</span>
+      <span class="ruby-ivar">@rows</span>           = <span class="ruby-identifier">results</span>
+      <span class="ruby-ivar">@column_order</span>   = <span class="ruby-value">0</span>
+      <span class="ruby-ivar">@merged_options</span> = <span class="ruby-constant">DEFAULT_OPTIONS</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>)
+      <span class="ruby-ivar">@table_columns</span>  = <span class="ruby-identifier">initialise_columns</span>(<span class="ruby-identifier">rows</span>, <span class="ruby-identifier">klass</span>, <span class="ruby-identifier">merged_options</span>)
+      <span class="ruby-ivar">@totals</span>         = <span class="ruby-identifier">initialise_totalling</span>(<span class="ruby-identifier">rows</span>, <span class="ruby-identifier">table_columns</span>)
+      <span class="ruby-identifier">results</span>.<span class="ruby-identifier">sort</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:sort</span>]) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:sort</span>]
+      <span class="ruby-ivar">@merged_options</span>[<span class="ruby-identifier">:rows</span>] = <span class="ruby-identifier">results</span>
+      <span class="ruby-ivar">@html</span> = <span class="ruby-constant">Builder</span><span class="ruby-operator">::</span><span class="ruby-constant">XmlMarkup</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:indent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>)
+      <span class="ruby-ivar">@column_cache</span>   = {}
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,5 +1,5 @@
-# Allow us to define the column formats to be used in to_table
-# for AR result sets
+# Module included into ActiveRecord at gem activation.  Includes methods
+# to define column formats used when rendering an HTML table.
 module ColumnFormats
   def self.included(base)
     base.class_eval do
@@ -13,11 +13,49 @@ module ColumnFormats
   end
   
   module ClassMethods
-    def table_format(method, options)
+    # Define a column format.
+    #
+    # ====Options
+    #
+    #   :order      Defines the column output order relative to other columns
+    #   :total      Column totaling method
+    #   :class      CSS Class to be added to the table cell
+    #   :formatter  Formatter to be applied.  Default is #to_s.  A symbol or lambda.  Symbol can
+    #               represent any method that accepts a value and options including methods in
+    #               ActionView::Helpers::NumberHelper
+    #
+    # See HtmlTable::ColumnFormatter for formatter options.
+    #
+    # ====Examples
+    #
+    #   class Product < ActiveRecord::Base
+    #     column_format :name,      :order => 1
+    #     column_format :orders,    :total => :sum
+    #     column_format :revenue,   :total => :sum, :order => 5, :class => 'right'
+    #     column_format :age, 	    :total => :avg, :order => 20, :class => 'right', :formatter => :number_with_delimiter
+    #   end
+    def column_format(method, options)
       @attr_formats = (@attr_formats || default_formats).deep_merge({method.to_s => options})
     end
-    alias :column_format :table_format
-    
+    alias :table_format :column_format
+
+    # Retrieve a column format.
+    #
+    # ====Examples
+    #
+    #   # Given the following class definition
+    #   class Product < ActiveRecord::Base
+    #     column_format :name,      :order => 1
+    #     column_format :orders,    :total => :sum
+    #     column_format :revenue,   :total => :sum, :order => 5, :class => 'right'
+    #     column_format :age, 	    :total => :avg, :order => 20, :class => 'right', :formatter => :number_with_delimiter
+    #   end
+    #
+    #   Product.format_of(:name)
+    #   => { :order => 1 }
+    #
+    #   Product.format_of(:revenue)
+    #   => { :total => :sum, :order => 5, :class => 'right' }
     def format_of(name)
       @attr_formats ||= default_formats
       @attr_formats[name] || {}

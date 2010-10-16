@@ -20,6 +20,27 @@ module HtmlTable
         :not_set_key  => 'tables.not_set'
     }
     
+    # Initialize a table formatter.  Not normally called directly since
+    # Array#to_table takes care of this.
+    #
+    #   results: the value to be formatted
+    #   options: formatter options
+    #
+    # ====Options
+    #
+    #   :include        Array of attributes to include in the table. Default is all attributes excepted :excluded ones.
+    #   :exclude        Array of attributes to exclude from the table. Default is [:id, :updated_at, :created_at, :updated_on, :created_on]
+    #   :exclude_ids    Exclude attributes with names ending in '_id'. Default is _true_
+    #   :sort           A proc invoked to sort the rows before output.  Default is not to sort.
+    #   :heading        Table heading places in the first row of a table
+    #   :caption        Table caption applied with <caption> markup
+    #   :odd_row        CSS Class name of the odd rows in the table.  Default is _odd_
+    #   :even_row       CSS Class name of the even rows.  Default is _even_
+    #   :totals         Include a total row if _true_.  Default is _true_
+    #   :total_one      I18n key for displaying a table footer when there is one row.  Default _tables.total_one_
+    #   :total_many     I18n key for displaying a table footer when there are > 1 rows. Default is _tables.total_many_
+    #   :unknown_key    I18n key for displaying _Unknown_. Default is _tables.unknown_
+    #   :not_set_key    I18n key for displaying _Not Set_.  Default is _tables.no_set_ 
     def initialize(results, options)
       raise ArgumentError, "[to_table] First argument must be an array of ActiveRecord rows" \
         unless  results.try(:first).try(:class).try(:descends_from_active_record?) ||
@@ -40,7 +61,14 @@ module HtmlTable
       @column_cache   = {}
     end
 
-    # Main method for rendering a table
+    # Render the result set to an HTML table using the
+    # options set at object instantiation.
+    #
+    # ====Examples
+    #
+    #   products = Product.all
+    #   formatter = HtmlTable::TableFormatter.new(products)
+    #   formatter.to_html
     def to_html
       options = merged_options
       table_options = {}
@@ -87,12 +115,12 @@ module HtmlTable
       end
     end
 
-    # Table footers
+    # Outputs table footer
     def output_table_footers(options)
       output_table_totals(options) if options[:totals] && rows.length > 1
     end
 
-    # Output totals (calculations)
+    # Output totals row (calculations)
     def output_table_totals(options)
       return unless table_has_totals?
       html.tfoot do
@@ -112,6 +140,7 @@ module HtmlTable
       output_cell_value(:td, row[column[:name]], column, options)
     end
   
+    # Outputs one cells value after invoking its formatter
     def output_cell_value(cell_type, value, column, options = {})
       column_name = column[:name].to_sym
       column_cache[column_name] = {} unless column_cache.has_key?(column_name)

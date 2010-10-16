@@ -59,8 +59,8 @@ h2. Predefined formatters
 |:currency_without_sign|Calls **#number_with_precision** with precision 2.|
 |:percentage|An integer rendered as a percentage.  Calls **#number_to_percentage** with a precision of 1.|
 |:bar_and_percentage|Displays a CSS bar and a percentage.|
-|:unknown_on_blank|Displays **(unknown)** when **column.blank?** is true.  This is a localized value.  The key **I18n.t('table.unknown')** is used.|
-|:not_set_on_blank|Displays **(not set)** when **column.blank?** is true.  This is a localized value.  The key **I18n.t('table.not_set')** is used.|
+|:unknown_on_blank|Displays **(unknown)** when **column.blank?** is true.  This is a localized value.  The key **I18n.t('tables.unknown')** is used.|
+|:not_set_on_blank|Displays **(not set)** when **column.blank?** is true.  This is a localized value.  The key **I18n.t('tables.not_set')** is used.|
 
 p. If no formatter is specified then **#to_s** is called on the value unless the value is a **Fixnumn** in which case **#number_with_delimiter** is called.
 
@@ -83,6 +83,8 @@ bc. :exclude      => EXCLUDE_COLUMNS,
 |:exclude|Array of columns that should not be rendered|
 |:exclude_ids|Don't render columns that end in **_id**|
 |:sort|A **Proc** that is called to sort the rows.  Called as **results.sort(options[:sort])**.|
+|:heading|A table heading that is placed in the first row of a table|
+|:caption|A table caption applied with <caption> markup|
 |:odd_row|CSS class name for odd rows|
 |:even_row|CSS class name for even rows|
 |:totals|Add a total row at the bottom of the table|
@@ -95,7 +97,7 @@ h1. License
 
 (The MIT License)
 
-Copyright © 2010 KipCole
+Copyright © 2010 Kip Cole
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the ‘Software’), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
