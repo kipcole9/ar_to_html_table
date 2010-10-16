@@ -1,4 +1,4 @@
-module HtmlTable
+module ArToHtmlTable
   class TableFormatter
     include                 HtmlTable::ColumnFormatter
     include                 ::ActionView::Helpers::NumberHelper
@@ -67,7 +67,7 @@ module HtmlTable
     # ====Examples
     #
     #   products = Product.all
-    #   formatter = HtmlTable::TableFormatter.new(products)
+    #   formatter = ArToHtmlTable::TableFormatter.new(products)
     #   formatter.to_html
     def to_html
       options = merged_options

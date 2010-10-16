@@ -1,6 +1,6 @@
 # Adds method to Array to allow output of html tables - only works
-# if the array is an ActiveRecord result set. See HtmlTable::TableFormatter
-module HtmlTable
+# if the array is an ActiveRecord result set. See ArToHtmlTable::TableFormatter
+module ArToHtmlTable
   module Model
     def self.included(base)
       base.class_eval do
@@ -17,9 +17,9 @@ module HtmlTable
       #   # Render all products as an HTML table
       #   Product.all.to_table
       # 
-      # See HtmlTable::TableFormatter for options.
+      # See ArToHtmlTable::TableFormatter for options.
       def to_table(options = {})
-        @formatter = HtmlTable::TableFormatter.new(self, options)
+        @formatter = ArToHtmlTable::TableFormatter.new(self, options)
         @formatter.to_html
       end
     end

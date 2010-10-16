@@ -8,7 +8,7 @@
 #
 # Hence any method already in scope at the time of formatting is available as well.
 # For example <tt>number_with_delimeter</tt> and friends are valid formatters.
-module HtmlTable
+module ArToHtmlTable
   module ColumnFormatter
     
     def self.included(base) #:nodoc:

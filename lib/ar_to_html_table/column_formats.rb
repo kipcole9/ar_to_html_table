@@ -1,6 +1,6 @@
 # Module included into ActiveRecord at gem activation.  Includes methods
 # to define column formats used when rendering an HTML table.
-module HtmlTable
+module ArToHtmlTable
   module ColumnFormats
     def self.included(base)
       base.class_eval do
