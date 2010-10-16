@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
     as an HTML table.
   EOF
 
-  #s.rubyforge_project = "ar_to_html_table"
+  s.rubyforge_project = "ar_to_html_table"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
