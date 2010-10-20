@@ -112,7 +112,7 @@ bc.   class Product < ActiveRecord::Base
      column_format :age,       :total => :avg, :order => 20, :class => 'right', :formatter => :number_with_delimiter
    end
  
-bc.   p = Product.first
+bc.    p = Product.first
    => #<Product id: 55986, age: 4346, .........
    p.age
    => 4346
