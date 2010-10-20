@@ -38,6 +38,8 @@ module ArToHtmlTable
     end
   
     module ClassMethods
+      include ArToHtmlTable::ColumnFormatter
+      include ::ActionView::Helpers::NumberHelper
       # Define a column format.
       #
       # ====Options
@@ -60,11 +62,11 @@ module ArToHtmlTable
       #     column_format :age, 	    :total => :avg, :order => 20, :class => 'right', :formatter => :number_with_delimiter
       #   end
       def column_format(method, options)
-        options[:formatter] = ::ArToHtmlTable::TableFormatter.procify(options[:formatter]) if options[:formatter] && options[:formatter].is_a?(Symbol)
-        @attr_formats = (@attr_formats || default_formats).merge({method.to_s => options})
+        options[:formatter] = procify(options[:formatter]) if options[:formatter] && options[:formatter].is_a?(Symbol)
+        @attr_formats = (@attr_formats || default_formats).deep_merge({method.to_s => options})
       end
       alias :table_format :column_format
-
+      
       # Retrieve a column format.
       #
       # ====Examples
@@ -112,7 +114,11 @@ module ArToHtmlTable
       end
       alias :format_attribute :format_column
     
-    private
+    private    
+      def procify(symbol)
+        proc { |*args| send(symbol, *args) }
+      end
+
       # Default column formats used in to_table for active_record
       # result arrays
       #
@@ -131,7 +137,7 @@ module ArToHtmlTable
           when :text, :string
             { :formatter => lambda {|*args| args[0]} }
           when :date, :datetime
-            { :formatter => lambda {|*args| args[0].to_s(:db)} }
+            { :formatter => lambda {|*args| (args[0].is_a?(Date) || args[0].is_a?(DateTime)) ? args[0].to_s(:db) : args[0].to_s} }
           else
             { :formatter => lambda {|*args| args[0].to_s} }
           end

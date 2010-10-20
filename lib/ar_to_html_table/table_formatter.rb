@@ -1,13 +1,5 @@
 module ArToHtmlTable
   class TableFormatter
-    include                 ArToHtmlTable::ColumnFormatter
-    include                 ::ActionView::Helpers::NumberHelper
-    
-    # So formatters can be invoked as class methods which is common
-    # if we using formatters outside ArToHtmlTable
-    extend                  ArToHtmlTable::ColumnFormatter
-    extend                  ::ActionView::Helpers::NumberHelper
-    
     attr_accessor           :html, :table_columns, :klass, :merged_options, :rows, :totals
     attr_accessor           :column_cache
 
@@ -147,6 +139,8 @@ module ArToHtmlTable
   
     # Outputs one cells value after invoking its formatter
     def output_cell_value(cell_type, value, column, options = {})
+      raise ArgumentError, "Column has no formatter: #{column[:name]}." unless column[:formatter]
+
       column_name = column[:name].to_sym
       column_cache[column_name] = {} unless column_cache.has_key?(column_name)
 
@@ -161,32 +155,11 @@ module ArToHtmlTable
         html << result
       end
     end
-    
-    def self.procify(symbol)
-      proc { |*args| send(symbol, *args) }
-    end
-    
-    # A data formatter can be a symbol or a proc
-    # If its a symbol then we 'procify' it so that
-    # we have on calling interface in the output_cell method
-    # - partially for clarity and partially for performance
-    def procify(sym)
-      self.procify(sym)
-    end
 
   private
     # Craft a CSS id
     def row_id(row)
       "#{klass.name.underscore}_#{row[klass.primary_key]}"
-    end
-  
-    def default_formatter(data, options)
-      case data
-      when Fixnum
-        integer_with_delimiter(data, options)
-      else
-        data.to_s
-      end
     end
   
     def table_has_totals?
@@ -231,38 +204,19 @@ module ArToHtmlTable
   
     def column_definition(column)
       @column_order += 1
-      @default_formatter ||= procify(:default_formatter)
-    
-      css_class, formatter = get_column_formatter(column.to_s)
-      column_order = klass.format_of(column)[:order] || @column_order
-      totals = klass.format_of(column)[:total]
+      format_options = klass.format_of(column)
       return {
         :name       => column,
         :label      => klass.human_attribute_name(column),
-        :formatter  => formatter || @default_formatter,
-        :class      => css_class,
-        :order      => column_order,
-        :total      => totals
+        :formatter  => format_options[:formatter],
+        :class      => format_options[:class],
+        :order      => format_options[:order] || @column_order,
+        :total      => format_options[:total]
       }
     end
   
     def columns_from_row(row)
       row.attributes.inject([]) {|columns, (k, v)| columns << k.to_s }
-    end
-  
-    def get_column_formatter(column)
-      format = klass.format_of(column)
-      case format
-      when Symbol
-        formatter = procify(format)
-      when Proc
-        formatter = format  
-      when Hash
-        css_class = format[:class] if format[:class]
-        formatter = format[:formatter] if format[:formatter]
-        formatter = procify(formatter) if formatter && formatter.is_a?(Symbol)
-      end
-      return css_class, formatter
     end
 
     # Decide if the given column is to be displayed in the table
