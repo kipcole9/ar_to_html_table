@@ -62,11 +62,16 @@ h2. Predefined formatters
 |:unknown_on_blank|Displays **(unknown)** when **column.blank?** is true.  This is a localized value.  The key **I18n.t('tables.unknown')** is used.|
 |:not_set_on_blank|Displays **(not set)** when **column.blank?** is true.  This is a localized value.  The key **I18n.t('tables.not_set')** is used.|
 
-p. If no formatter is specified then **#to_s** is called on the value unless the value is a **Fixnumn** in which case **#number_with_delimiter** is called.
+p. If no formatter is specified then:
+
+* string and text values are used unmodified
+* date and datetime values are called on **to_s(:db)**
+* integers and floats are called on **number_with_delimiter**
+* **to_s** is called on all other column types.
 
 h2. Table rendering
 
-To render the html table, call **#to_table(options)** on any ActiveRecord result set.  The default options are:
+To render the html table, call **to_table(options)** on any ActiveRecord result set.  The default options are:
 
 bc. :exclude      => EXCLUDE_COLUMNS, 
 :exclude_ids  => true, 

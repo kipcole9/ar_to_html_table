@@ -156,6 +156,10 @@ module ArToHtmlTable
         html << result
       end
     end
+    
+    def self.procify(symbol)
+      proc { |*args| send(symbol, *args) }
+    end
 
   private
     # Craft a CSS id
@@ -253,7 +257,7 @@ module ArToHtmlTable
     # we have on calling interface in the output_cell method
     # - partially for clarity and partially for performance
     def procify(sym)
-      proc { |val, options| send(sym, val, options) }
+      self.procify(sym)
     end
 
     # Decide if the given column is to be displayed in the table

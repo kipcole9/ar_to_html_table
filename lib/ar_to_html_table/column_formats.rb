@@ -76,13 +76,14 @@ module ArToHtmlTable
         columns.each do |column|
           attr_formats[column.name] = case column.type
           when :integer, :float
-            {:class => :right, :formatter => :number_with_delimiter}
+            { :class => :right, 
+              :formatter => lambda {|*args| number_with_delimiter(args[0])} }
           when :text, :string
-            {}
+            { :formatter => lambda {|*args| args[0]} }
           when :date, :datetime
-            {}
+            { :formatter => lambda {|*args| args[0].to_s(:db)} }
           else
-            {}
+            { :formatter => lambda {|*args| args[0].to_s} }
           end
         end
         attr_formats
