@@ -10,7 +10,9 @@ module ArToHtmlTable
     end
   
     module InstanceMethods
-
+      def format_column(column_name)
+        self.class.format_column(column_name, self[column_name])
+      end
     end
   
     module ClassMethods
@@ -60,6 +62,12 @@ module ArToHtmlTable
       def format_of(name)
         @attr_formats ||= default_formats
         @attr_formats[name.to_s] || {}
+      end
+      
+      def format_column(column_name, value)
+        formatter = format_of(column_name)[:formatter]
+        raise "Column #{column_name} has no configured formatter" unless formatter && formatter.is_a?(Proc)
+        formatter.call(value)
       end
     
     private
