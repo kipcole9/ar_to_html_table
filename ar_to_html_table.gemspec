@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Kip Cole"]
   s.email       = ["kipcole9@gmail.com"]
   s.homepage    = "http://github.com/kipcole9/ar_to_html_table"
-  s.summary     = %q{Render and ActiveRecord result set as an HTML table}
+  s.summary     = %q{Render an ActiveRecord result set as an HTML table}
   s.description = <<-EOF
     Defines Array#to_table that will render an ActiveRecord result set
     as an HTML table.
