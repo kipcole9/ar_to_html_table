@@ -109,15 +109,14 @@ bc.   class Product < ActiveRecord::Base
      column_format :name,      :order => 1
      column_format :orders,    :total => :sum
      column_format :revenue,   :total => :sum, :order => 5, :class => 'right'
-     column_format :age, 	   :total => :avg, :order => 20, :class => 'right', :formatter => :number_with_delimiter
+     column_format :age,       :total => :avg, :order => 20, :class => 'right', :formatter => :number_with_delimiter
    end
  
-   # p = Product.first
+   p = Product.first
    => #<Product id: 55986, age: 4346, .........
-   # p.age
+   p.age
    => 4346
-
-   # p.format_column(:age)
+   p.format_column(:age)
    => "4,346"
 
 h1. License
