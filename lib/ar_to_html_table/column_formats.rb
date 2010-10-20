@@ -60,7 +60,8 @@ module ArToHtmlTable
       #     column_format :age, 	    :total => :avg, :order => 20, :class => 'right', :formatter => :number_with_delimiter
       #   end
       def column_format(method, options)
-        @attr_formats = (@attr_formats || default_formats).deep_merge({method.to_s => options})
+        options[:formatter] = ::ArToHtmlTable::TableFormatter.procify(options[:formatter]) if options[:formatter] && options[:formatter].is_a?(Symbol)
+        @attr_formats = (@attr_formats || default_formats).merge({method.to_s => options})
       end
       alias :table_format :column_format
 

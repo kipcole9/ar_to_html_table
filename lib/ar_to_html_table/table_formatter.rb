@@ -3,6 +3,11 @@ module ArToHtmlTable
     include                 ArToHtmlTable::ColumnFormatter
     include                 ::ActionView::Helpers::NumberHelper
     
+    # So formatters can be invoked as class methods which is common
+    # if we using formatters outside ArToHtmlTable
+    extend                  ArToHtmlTable::ColumnFormatter
+    extend                  ::ActionView::Helpers::NumberHelper
+    
     attr_accessor           :html, :table_columns, :klass, :merged_options, :rows, :totals
     attr_accessor           :column_cache
 
@@ -160,6 +165,14 @@ module ArToHtmlTable
     def self.procify(symbol)
       proc { |*args| send(symbol, *args) }
     end
+    
+    # A data formatter can be a symbol or a proc
+    # If its a symbol then we 'procify' it so that
+    # we have on calling interface in the output_cell method
+    # - partially for clarity and partially for performance
+    def procify(sym)
+      self.procify(sym)
+    end
 
   private
     # Craft a CSS id
@@ -250,14 +263,6 @@ module ArToHtmlTable
         formatter = procify(formatter) if formatter && formatter.is_a?(Symbol)
       end
       return css_class, formatter
-    end
-  
-    # A data formatter can be a symbol or a proc
-    # If its a symbol then we 'procify' it so that
-    # we have on calling interface in the output_cell method
-    # - partially for clarity and partially for performance
-    def procify(sym)
-      self.procify(sym)
     end
 
     # Decide if the given column is to be displayed in the table
