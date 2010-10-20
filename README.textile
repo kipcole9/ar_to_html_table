@@ -82,9 +82,9 @@ bc. :exclude      => EXCLUDE_COLUMNS,
 :total_many   => 'tables.total_many',
 :unknown_key  => 'tables.unknown',
 :not_set_key  => 'tables.not_set',
-:heading	  => nil,
-:caption	  => nil,
-:sort		  => nil
+:heading      => nil,
+:caption      => nil,
+:sort         => nil
 
 |_. Option|_. Description|
 |:include|Array of columns that should be rendered|
@@ -100,6 +100,25 @@ bc. :exclude      => EXCLUDE_COLUMNS,
 |:total_many|I18n key for rendering the total row when the total is not one|
 |:unknown_key|I18n key for rendering **(Unknown)**|
 |:not_set_key|I18n key for rendering **(Not Set)**|
+
+h2. Using formatters outside ar_to_html_table
+
+Once defined the formatters can be used in other places. Both class and instance methods are provided.  Best explained by the following example:
+
+bc.   class Product < ActiveRecord::Base
+     column_format :name,      :order => 1
+     column_format :orders,    :total => :sum
+     column_format :revenue,   :total => :sum, :order => 5, :class => 'right'
+     column_format :age, 	   :total => :avg, :order => 20, :class => 'right', :formatter => :number_with_delimiter
+   end
+ 
+   # p = Product.first
+   => #<Product id: 55986, age: 4346, .........
+   # p.age
+   => 4346
+
+   # p.format_column(:age)
+   => "4,346"
 
 h1. License
 

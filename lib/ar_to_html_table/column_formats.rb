@@ -10,9 +10,31 @@ module ArToHtmlTable
     end
   
     module InstanceMethods
+      # Invoke the formatter on a column.
+      #
+      # ====Examples
+      #
+      #   class Product < ActiveRecord::Base
+      #     column_format :name,      :order => 1
+      #     column_format :orders,    :total => :sum
+      #     column_format :revenue,   :total => :sum, :order => 5, :class => 'right'
+      #     column_format :age, 	    :total => :avg, :order => 20, :class => 'right', :formatter => :number_with_delimiter
+      #   end
+      # 
+      #   # p = Product.first
+      #   # p.age
+      #   => 4346
+      #
+      #   # p.format_column(:age)
+      #   => "4,346"
+      #
+      # ====Parameters
+      #
+      #   column_name:  A column (attribute) on the the model instance 
       def format_column(column_name)
         self.class.format_column(column_name, self[column_name])
       end
+      alias :format_attribute :format_column
     end
   
     module ClassMethods
@@ -64,11 +86,30 @@ module ArToHtmlTable
         @attr_formats[name.to_s] || {}
       end
       
+      # Invoke the formatter on a column.
+      #
+      # ====Examples
+      #
+      #   class Product < ActiveRecord::Base
+      #     column_format :name,      :order => 1
+      #     column_format :orders,    :total => :sum
+      #     column_format :revenue,   :total => :sum, :order => 5, :class => 'right'
+      #     column_format :age, 	    :total => :avg, :order => 20, :class => 'right', :formatter => :number_with_delimiter
+      #   end
+      #
+      #   # Product.format_column(:age, 4346)
+      #   => "4,346"
+      #
+      # ====Parameters
+      #
+      #   column_name:  A column (attribute) on the the model instance
+      #   value: The value to be formatted
       def format_column(column_name, value)
         formatter = format_of(column_name)[:formatter]
         raise "Column #{column_name} has no configured formatter" unless formatter && formatter.is_a?(Proc)
         formatter.call(value, {})
       end
+      alias :format_attribute :format_column
     
     private
       # Default column formats used in to_table for active_record
