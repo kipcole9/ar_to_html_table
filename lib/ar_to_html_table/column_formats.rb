@@ -67,7 +67,7 @@ module ArToHtmlTable
       def format_column(column_name, value)
         formatter = format_of(column_name)[:formatter]
         raise "Column #{column_name} has no configured formatter" unless formatter && formatter.is_a?(Proc)
-        formatter.call(value)
+        formatter.call(value, {})
       end
     
     private
