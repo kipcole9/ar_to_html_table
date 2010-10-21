@@ -39,7 +39,7 @@ module ArToHtmlTable
       if options[:cell_type] == :th
         val
       else
-        val.blank? ? I18n.t(options[:not_set_key]) : val
+        val.blank? ? I18n.t(options[:not_set_key] || 'tables.not_set') : val
       end
     end
 
@@ -63,7 +63,7 @@ module ArToHtmlTable
       if options[:cell_type] == :th
         val
       else    
-        val.blank? ? I18n.t(options[:unknown_key]) : val
+        val.blank? ? I18n.t(options[:unknown_key] || 'tables.unknown') : val
       end
     end
 
@@ -73,7 +73,7 @@ module ArToHtmlTable
     # ====Examples
     #
     #   # Given a value of 3600, the formatter will output
-    #   00:05:00
+    #   => 00:05:00
     #
     #   val: the value to be formatted
     #   options: formatter options
@@ -92,21 +92,113 @@ module ArToHtmlTable
     # ====Examples
     #
     #   # Given a value of 11, the formatter will output
-    #   11:00
+    #   => 11:00
     #
     #   val: the value to be formatted
     #   options: formatter options
     def hours_to_time(val, options)
       "#{"%02d" % val}:00"
     end
+    
+    # Ordinalize a number (ie 1st, 2nd, 3rd, ....).  Localization is
+    # handled externally to this method
+    #
+    # ====Examples
+    #
+    #   # Given a value of 14, the formatter will output
+    #   => 14th
+    #
+    #   val: the value to be formatted
+    #   options: formatter options
+    def ordinalize(val, options)
+      val ? val.to_i.ordinalize : val
+    end
+    
+    # Display as a short date (localized)
+    #
+    # ====Examples
+    #
+    #   # Given a value of 2010/10/1, the formatter will output
+    #   => 1 Oct
+    #
+    #   val: the value to be formatted
+    #   options: formatter options
+    def short_date(val, options)
+      val ? val.to_date.to_s(:short) : val
+    end
 
+    # Display as a long date (localized)
+    #
+    # ====Examples
+    #
+    #   # Given a value of 2010/10/1, the formatter will output
+    #   => October 1, 2010
+    #
+    #   val: the value to be formatted
+    #   options: formatter options
+    def long_date(val, options)
+      val ? val.to_date.to_s(:long) : val
+    end
+    
+    # Display as a long month name (localized)
+    #
+    # ====Examples
+    #
+    #   # Given a value of 9, the formatter will output
+    #   => 'September'
+    #
+    #   val: the value to be formatted
+    #   options: formatter options
+    def long_month_name(val, options)
+      val ? I18n.t('date.month_names')[val.to_i] : val
+    end
+    
+    # Display as a short month name (localized)
+    #
+    # ====Examples
+    #
+    #   # Given a value of 9, the formatter will output
+    #   => 'Sep'
+    #
+    #   val: the value to be formatted
+    #   options: formatter options
+    def short_month_name(val, options)
+      val ? I18n.t('date.abbr_month_names')[val.to_i] : val
+    end    
+
+    # Display as a long day name (localized)
+    #
+    # ====Examples
+    #
+    #   # Given a value of 1, the formatter will output
+    #   => 'Monday'
+    #
+    #   val: the value to be formatted
+    #   options: formatter options
+    def long_day_name(val, options)
+      val ? I18n.t('date.day_names')[val.to_i] : val
+    end
+    
+    # Display as a short day name (localized)
+    #
+    # ====Examples
+    #
+    #   # Given a value of 1, the formatter will output
+    #   => 'Mon'
+    #
+    #   val: the value to be formatted
+    #   options: formatter options
+    def short_day_name(val, options)
+      val ? I18n.t('date.abbr_day_names')[val.to_i] : val
+    end
+    
     # Interprets an integer as a percentage with a single
     # digit of precision. Shim for <tt>#number_to_percentage</tt>
     #
     # ====Examples
     #
     #   # Given a value of 48, the formatter will output
-    #   48.00%
+    #   => 48.00%
     #
     #   val: the value to be formatted
     #   options: formatter options
