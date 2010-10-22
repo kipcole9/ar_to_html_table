@@ -1,0 +1,5 @@
+ar_to_html_table (0.1.6)
+
+* Included ::ActionView::Helpers::DateHelper into column_formats so those methods can be use
+in formatters
+
