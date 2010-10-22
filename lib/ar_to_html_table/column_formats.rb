@@ -40,6 +40,7 @@ module ArToHtmlTable
     module ClassMethods
       include ArToHtmlTable::ColumnFormatter
       include ::ActionView::Helpers::NumberHelper
+      include ::ActionView::Helpers::DateHelper
       # Define a column format.
       #
       # ====Options
