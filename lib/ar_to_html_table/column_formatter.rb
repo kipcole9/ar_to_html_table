@@ -78,6 +78,7 @@ module ArToHtmlTable
     #   val: the value to be formatted
     #   options: formatter options
     def seconds_to_time(val, options)
+      val = val.to_i
       hours = val / 3600
       minutes = (val / 60) - (hours * 60)
       seconds = val % 60

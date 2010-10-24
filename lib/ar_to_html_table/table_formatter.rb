@@ -153,7 +153,7 @@ module ArToHtmlTable
         column_cache[column_name][value] = result
       end
       html.__send__(cell_type, (column[:class] ? {:class => column[:class]} : {})) do
-        html << result
+        html << result.to_s
       end
     end
 
