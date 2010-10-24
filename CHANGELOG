@@ -1,3 +1,7 @@
+ar_to_html_table (0.1.9) October 24, 2010
+
+* Bar and percentage fixes for when % > 100
+
 ar_to_html_table (0.1.8) October 24, 2010
 
 * Formatter seconds_to_time now omits the hours if the time is less than one hour.

@@ -75,6 +75,9 @@ module ArToHtmlTable
     #   # Given a value of 3600, the formatter will output
     #   => 05:00
     #
+    #   # Given a value of 3600, the formatter will output
+    #   => 05:00
+    #
     #   val: the value to be formatted
     #   options: formatter options
     def seconds_to_time(val, options)
@@ -274,8 +277,9 @@ module ArToHtmlTable
     #   options: formatter options
     def bar_and_percentage(val, options)
       if options[:cell_type] == :td
+        val = val.to_f
         width = val * bar_reduction_factor(val)
-        bar = (val.to_f > MIN_PERCENT_BAR_VALUE) ? "<div class=\"hbar\" style=\"width:#{width}%\">&nbsp;</div>" : ''
+        bar = (val > MIN_PERCENT_BAR_VALUE) ? "<div class=\"hbar\" style=\"width:#{width}%\">&nbsp;</div>" : ''
         bar + "<div>" + percentage(val, :precision => 1) + "</div>"
       else
         percentage(val, :precision => 1)
@@ -285,8 +289,9 @@ module ArToHtmlTable
   private
     def bar_reduction_factor(value)
       case value
-        when 0..79  then  REDUCTION_FACTOR
-        when 80..99 then  0.6
+        when 0..79    then  REDUCTION_FACTOR
+        when 80..100  then  0.7
+        when 100.1000 then  0.6
         else 0.3
       end
     end  
