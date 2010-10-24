@@ -68,12 +68,12 @@ module ArToHtmlTable
     end
 
     # Interprets an integer as a duration and outputs the duration
-    # in the format hh:mm:ss
+    # in the format hh:mm:ss or mm:hh:ss if the time is less than an hour.
     #
     # ====Examples
     #
     #   # Given a value of 3600, the formatter will output
-    #   => 00:05:00
+    #   => 05:00
     #
     #   val: the value to be formatted
     #   options: formatter options
@@ -84,9 +84,13 @@ module ArToHtmlTable
       seconds = val % 60
       (minutes += 1; seconds = 0) if seconds == 60
       (hours += 1; minutes = 0) if minutes == 60
-      "#{"%02d" % hours}:#{"%02d" % minutes}:#{"%02d" % seconds}"
+      if hours > 0
+        "#{"%02d" % hours}:#{"%02d" % minutes}:#{"%02d" % seconds}"
+      else
+        "#{"%02d" % minutes}:#{"%02d" % seconds}"
+      end
     end
-  
+
     # Interprets an integer as a number of hours and outputs the value
     # in the format hh:00
     #
