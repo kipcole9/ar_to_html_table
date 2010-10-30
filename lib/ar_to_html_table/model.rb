@@ -19,8 +19,8 @@ module ArToHtmlTable
       # 
       # See ArToHtmlTable::TableFormatter for options.
       def to_table(options = {})
-        @formatter = ArToHtmlTable::TableFormatter.new(self, options)
-        @formatter.to_html
+        @table_formatter = ArToHtmlTable::TableFormatter.new(self, options)
+        @table_formatter.to_html
       end
     end
   

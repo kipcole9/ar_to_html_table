@@ -1,3 +1,20 @@
+ar_to_html_table (0.2.0) October 30, 2010
+
+* Table formatter now calls row instance method (DRY's up formatting)
+  and making column formatting stand alone from table formatting.  Next
+  step separate column_formatting into a separate gem.
+
+* Options can now be defined on the column_format call (:options = {})
+  which are passed to the formatter at invocation
+
+* :trend is now a valid totaling method.  Requires ar_results_calculations
+
+* Add dependency for ar_result_calculations
+
+ar_to_html_table (0.1.10) October 24, 2010
+
+* Options can be passed in #format_column
+
 ar_to_html_table (0.1.9) October 24, 2010
 
 * Bar and percentage fixes for when % > 100

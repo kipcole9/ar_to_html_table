@@ -108,7 +108,7 @@ module ArToHtmlTable
       html_options[:class] = (count.even? ? options[:even_row] : options[:odd_row])
       html_options[:id] = row_id(row) if row[klass.primary_key]
       html.tr html_options  do
-        table_columns.each {|column| output_cell(row, column, options) }
+        table_columns.each {|column| output_cell(:td, row, column, options) }
       end
     end
 
@@ -125,32 +125,20 @@ module ArToHtmlTable
           first_column = true
           table_columns.each do |column| 
             value = first_column ? first_column_total(options) : totals[column[:name].to_s]
-            output_cell_value(:th, value, column, options)
+            output_cell(:th, value, column, options)
             first_column = false
           end
         end
       end    
     end
 
-    # Outputs one cell
-    def output_cell(row, column, options = {})
-      output_cell_value(:td, row[column[:name]], column, options)
-    end
-  
-    # Outputs one cells value after invoking its formatter
-    def output_cell_value(cell_type, value, column, options = {})
-      # raise ArgumentError, "Column has no formatter: #{column[:name]}." unless column[:formatter]
-      column_name = column[:name].to_sym
-      column_cache[column_name] = {} unless column_cache.has_key?(column_name)
-
-      if column_cache[column_name].has_key?(value)
-        result = column_cache[column_name][value]
-      elsif column[:formatter]
-        result = column[:formatter].call(value, options.reverse_merge({:cell_type => cell_type, :column => column})) || ''
-        column_cache[column_name][value] = result
+    # Outputs one formatted cell
+    def output_cell(cell_type, row_or_value, column, options = {})
+      formatter_options = options.reverse_merge({:cell_type => cell_type, :column => column})
+      if row_or_value.class.respond_to? :descends_from_active_record?
+        result = row_or_value.format_column(column[:name], formatter_options)
       else
-        result = value.to_s || ''
-        column_cache[column_name][value] = result
+        result = klass.format_column(column[:name], row_or_value, formatter_options)
       end
       html.__send__(cell_type, (column[:class] ? {:class => column[:class]} : {})) do
         html << result.to_s
@@ -190,6 +178,8 @@ module ArToHtmlTable
             totals[column[:name]] = rows.make_numeric(column[:name]).mean(column[:name])
           when :count
             totals[column[:name]] = rows.make_numeric(column[:name]).count(column[:name])
+          when :trend
+            totals[column[:name]] = rows.make_numeric(column[:name]).trend(column[:name])
         end
         totals
       end  
@@ -209,7 +199,6 @@ module ArToHtmlTable
       return {
         :name       => column,
         :label      => klass.human_attribute_name(column),
-        :formatter  => format_options[:formatter],
         :class      => format_options[:class],
         :order      => format_options[:order] || @column_order,
         :total      => format_options[:total]

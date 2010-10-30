@@ -31,8 +31,26 @@ module ArToHtmlTable
       # ====Parameters
       #
       #   column_name:  A column (attribute) on the the model instance 
-      def format_column(column_name)
-        self.class.format_column(column_name, self[column_name])
+      #   options:  Formatter options (passed to the formatter)
+      #
+      # ====Options and where they come from
+      #
+      #   Options provided to a formatter are merged from several sources
+      #   Depending on who is calling the formatter.
+      #
+      #   table_formatter calls with options :cell_type and :column.  :cell_type
+      #   is either :td or :th depending on the type of cell the table formatter i
+      #   populating. :column is the internal column definition used by the table_formatter
+      #   which includes some attributes it uses.
+      #
+      #   instance#format_column (this method) merges in the :row options which is the
+      #   model instance.
+      #
+      #   class#format_column (the class method) merges in the formatter options (defined
+      #   as :options on the column_format definition)
+      def format_column(column_name, options = {})
+        formatter_options = options.merge(:row => self)
+        self.class.format_column(column_name, self[column_name], formatter_options)
       end
       alias :format_attribute :format_column
     end
@@ -62,7 +80,7 @@ module ArToHtmlTable
       #     column_format :revenue,   :total => :sum, :order => 5, :class => 'right'
       #     column_format :age, 	    :total => :avg, :order => 20, :class => 'right', :formatter => :number_with_delimiter
       #   end
-      def column_format(method, options)
+      def column_format(method, options = {})
         options[:formatter] = procify(options[:formatter]) if options[:formatter] && options[:formatter].is_a?(Symbol)
         @attr_formats = (@attr_formats || default_formats).deep_merge({method.to_s => options})
       end
@@ -108,10 +126,16 @@ module ArToHtmlTable
       #
       #   column_name:  A column (attribute) on the the model instance
       #   value: The value to be formatted
-      def format_column(column_name, value)
-        formatter = format_of(column_name)[:formatter]
-        raise "Column #{column_name} has no configured formatter" unless formatter && formatter.is_a?(Proc)
-        formatter.call(value, {})
+      #   options Formatter options
+      def format_column(column_name, value, options = {})
+        format = format_of(column_name)
+        if format && (formatter = format[:formatter])
+          formatter_options = options.merge(:options => format[:options])
+          formatter.call(value, formatter_options)
+        else
+          Rails.logger.debug "[table_formatter] Column #{column_name} has no configured formatter"
+          value.to_s
+        end
       end
       alias :format_attribute :format_column
     

@@ -45,7 +45,7 @@ h2. Column options
 
 |_. Option|_. Description|
 |:order|Positions a column order relative to other columns.  The number isn't important, just its relative value compared to other columns.  Columns are sorted by order and rendered in that order.  The default order is the order in which the columns are defined.|
-|:total|Renders a table footer with a calculation of all the values in the column.  The available totaling methods are **:sum**, **:count** and **:average** (or :avg or :mean)|
+|:total|Renders a table footer with a calculation of all the values in the column.  The available totaling methods are **:sum**, **:count**, **:average** (or :avg or :mean) and **trend** which is a calculated slope from a linear regression of the column|
 |:class|The CSS class for this column.  Note that a **colgroup** is defined for each column and each **colgroup** has as CSS class that is the column name|
 |:formatter|A :symbol representing a method to format the value of each table cell.  There are several predefined formatters but any method with a signature of **method(value, options = {})** will work, including the methods in ActionView::Helpers::NumberHelper. Lastly a lambda can be provided for arbitrary formatting.|
 
